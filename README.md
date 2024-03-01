@@ -4,5 +4,8 @@ This model will simulate the impact of qochas, amunas and restoration. It takes 
 # Where to deploy it
 These scripts are designed to be run at Imperial's HPC. You must log into the server first and run this commands.
 
+# Paralellization
+Paralellization is done with a PBS routine (default in Imperial's HPC).
+
 # Downloading files 
 The file called "transfer.sh" copies data from the ichydro server to the HPC.
