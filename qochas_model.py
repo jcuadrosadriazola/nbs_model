@@ -85,4 +85,4 @@ for i in range(jules.sizes["x"]):
       R=0
       Qav=0
 
-
+jules.to_netcdf(home+'/runs/mockrun.nc')
