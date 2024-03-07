@@ -13,12 +13,12 @@ ephemeral = str(os.environ['EPHEMERAL'])
 wd_hpc=str(os.environ['PBS_O_WORKDIR'])
 home=str(os.environ['HOME'])
 
-jules = rxr.open_rasterio(ephemeral+"/jules_runs/coupled_jules_oggm_historical_00_18.nc")
-jules["fao_et0"].attrs['units']="kg m-2 s-1"
-jules["surf_roff"].attrs['units']="kg m-2 s-1"
-jules["sub_surf_roff"].attrs['units']="kg m-2 s-1"
-jules["rain"].attrs['units']="kg m-2 s-1"
-jules["melt"].attrs['units']="kg m-2 s-1"
+jules = xr.open_dataset(ephemeral+"/jules_runs/coupled_jules_oggm_historical_00_18.nc")
+#jules["fao_et0"].attrs['units']="kg m-2 s-1"
+#jules["surf_roff"].attrs['units']="kg m-2 s-1"
+#jules["sub_surf_roff"].attrs['units']="kg m-2 s-1"
+#jules["rain"].attrs['units']="kg m-2 s-1"
+#jules["melt"].attrs['units']="kg m-2 s-1"
 
 # hydraulic conductivity
 satcon = xr.open_dataset(ephemeral+"/data/jules_soil_props_2015_rosetta3_ESA_rahu.nc")['satcon']
@@ -43,8 +43,8 @@ Ks=0 #Dummy for hydraulic conductivity
 
 #print("a")
 ## xarray.size output coordinates size for each dimensions. HOWEVER, indexing can be tricky. We will follow xarray.DataArray structure, i.e. time, y, x for indexing
-for i in range(jules.sizes["x"]):
-  for j in range(jules.sizes["y"]):
+for i in range(jules.sizes["lon"]):
+  for j in range(jules.sizes["lat"]):
     if qochas_n[0,j,i]>0:
       Ks=satcon[0,j,i].values
       vmax=qochas_cap[0,j,i].values
