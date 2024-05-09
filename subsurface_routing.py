@@ -28,6 +28,7 @@ hyd_cond0 = xr.zeros_like(jules.sub_surf_roff)
 for t in range(jules.sizes["time"]):
     hyd_cond0[t,...]=hyd_cond.Band1.values
 ### Create deep reservoir
+
 q_deep = xr.zeros_like(jules.sub_surf_roff)
 # calculate deep percolation. Hydraulic conductivity is multiplied by 1000 (m/s to mm/s )
 q_deep[...]=np.minimum(jules.sub_surf_roff,1000*hyd_cond0)
@@ -41,31 +42,25 @@ shallow_asnp = jules.sub_surf_roff.values
 shallow_asnp = np.append(shallow_asnp,np.zeros((365,75,102)),axis=0)
 shallow_asnp1 = np.zeros_like(shallow_asnp)
 for i in range(jules.sizes["lon"]):
-    for j in range(jules.sizes["lat"]):
+    for j in range(jules.sizes["lat"]):q
         for t in range(jules.sizes["time"]):
-            if shallow_asnp[t,j,i].values > 0:
-                shallow_asnp1[t:t+uh["conv"].values.size]+= shallow_asnp[t,j,i]*uh["conv"].values
+            if shallow_asnp[t,j,i] > 0:
+                shallow_asnp1[t:t+uh["conv"].size,j,i]+= shallow_asnp[t,j,i]*uh["conv"].values
+                
+
 # this will correct jules subsurface flow to account only for shallow partition
 jules.sub_surf_roff.values = shallow_asnp1[:jules.sizes["time"],...]
+jules.to_netcdf(home+'/runs/shallowrouted.nc')
 
-
-
-
-
-
-
-### Will consult with HPC support team. 
-## This is an inefficient version and might be better to multiply by a time operator array with timedelta dimension
-qochas_area[0,j,i].values
-
-
-## Delay function for deep subsurface
 # V1. Note that here, we lump all the deep drainage and pass it through a unique unit hydrograph.
 #       This might only be valid for KM105 station.
-Unit hydrograph for deep
+#Unit hydrograph for deep
+# lumping flows to a daily timeseries
+#q_deep_lump=q_deep.sum(dim=["lat","lon"]) # it would be better to import pixel area raster and multiply to have a water balance
+## pending implementation of UH
 
-Lump all together
-Calculate delay
+
+
 
 
 ## Implementing PCR-GLOBWB approach
