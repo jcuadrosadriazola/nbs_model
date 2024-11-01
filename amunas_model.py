@@ -50,8 +50,11 @@ a=jules.surf_roff-diversion.fillna(0)
 jules.surf_roff.values=a.values
 
 # Correct subsurface flow
-# Set an ET loss factor. Arbitrarily 0.5 now
-infilt=diversion.fillna(0)*0.5
+# Calculate ET
+operator_et=jules.fao_et0.where(diversion>0)
+et=np.minimum(operator_et*120000*8/15526711,diversion) ## note that we need to adjust 15526711 to cell size
+## Calculate infiltration
+infilt=diversion.fillna(0)-et.fillna(0)
 ## unit hydrograph i,j wise for shallow subsurface flow
 shallow_asnp = infilt.values
 shallow_asnp = np.append(shallow_asnp,np.zeros((365,75,102)),axis=0)
